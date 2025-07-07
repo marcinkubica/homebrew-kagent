@@ -13,11 +13,24 @@
 
 After deep analysis of the kagent release ecosystem, I've formulated a battle-tested strategy for implementing a homebrew tap that's both elegant and bulletproof. Think of it as the Terminator of package management - it'll be back for every release, automatically.
 
-**Key Innovation:** We'll create a fully automated pipeline that makes manual SHA updates as obsolete as floppy disks.
+**Key Innovation:** We'll create a fully automated pipeline that makes manual SHA updates as obsolete as floppy disks. By leveraging the GitHub Releases API and integrating with softprops/action-gh-release outputs, we avoid inefficient binary downloads.
 
 ---
 
 ## 1. Technical Architecture Analysis 🔍
+
+### 1.0 Integration with softprops/action-gh-release
+
+**Critical Discovery**: The kagent release process uses `softprops/action-gh-release` which provides valuable outputs:
+- `url`: The URL of the created release
+- `id`: The ID of the created release  
+- `upload_url`: The upload URL for the release
+
+**Optimization Strategy**: Instead of downloading binaries to compute SHAs, we:
+1. Use the GitHub Releases API to get asset information directly
+2. Leverage the `.sha256` files that kagent already publishes
+3. Create a separate `homebrew` job that runs after the `release` job
+4. Extract SHA values from existing checksum files (no binary downloads needed)
 
 ### 1.1 Current kagent Release Pipeline
 From my reconnaissance of `kagent-dev/kagent`, I've identified:
@@ -115,60 +128,89 @@ end
 
 ### 3.1 Release Integration Workflow
 
-**The Master Plan**: Extend kagent's existing `tag.yaml` to automatically update our tap.
+**The Master Plan**: Extend kagent's existing `tag.yaml` with a separate `homebrew` job that uses the GitHub Releases API.
 
 ```yaml
 # Addition to kagent-dev/kagent/.github/workflows/tag.yaml
-- name: Update Homebrew Tap
-  needs: release
-  runs-on: ubuntu-latest
-  if: startsWith(github.ref, 'refs/tags/')
-  steps:
-    - name: Checkout tap repository
-      uses: actions/checkout@v4
-      with:
-        repository: marcinkubica/homebrew-kagent
-        token: ${{ secrets.TAP_UPDATE_TOKEN }}
-        path: tap-repo
-        
-    - name: Download and compute SHAs
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/}
-        
-        # Download all platform binaries and compute SHAs
-        platforms=("darwin-amd64" "darwin-arm64" "linux-amd64" "linux-arm64")
-        
-        for platform in "${platforms[@]}"; do
-          echo "Processing kagent-${platform}..."
-          curl -sL -o "kagent-${platform}" \
-            "https://github.com/kagent-dev/kagent/releases/download/${VERSION}/kagent-${platform}"
+jobs:
+  release:
+    # existing release job using softprops/action-gh-release
+    runs-on: ubuntu-latest
+    outputs:
+      release_url: ${{ steps.release.outputs.url }}
+      release_id: ${{ steps.release.outputs.id }}
+    steps:
+      # existing steps...
+      - name: Release
+        id: release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/kagent-*
+          generate_release_notes: true
+
+  homebrew:
+    needs: release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@v4
+        with:
+          repository: marcinkubica/homebrew-kagent
+          token: ${{ secrets.TAP_UPDATE_TOKEN }}
+          path: tap-repo
           
-          sha=$(sha256sum "kagent-${platform}" | cut -d' ' -f1)
-          echo "${platform^^}_SHA=${sha}" >> $GITHUB_ENV
-        done
+      - name: Get release information and SHAs via API
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          REPO_OWNER="kagent-dev"
+          REPO_NAME="kagent"
+          
+          # Get release information from GitHub API
+          RELEASE_DATA=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${VERSION}")
+          
+          # Extract SHA values from .sha256 files in the release assets
+          platforms=("darwin-amd64" "darwin-arm64" "linux-amd64" "linux-arm64")
+          
+          for platform in "${platforms[@]}"; do
+            echo "Getting SHA for kagent-${platform}..."
+            
+            # Get the .sha256 file content directly from the release
+            sha_content=$(curl -s \
+              "https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/${VERSION}/kagent-${platform}.sha256")
+            
+            # Extract just the SHA (first part before space)
+            sha=$(echo "$sha_content" | cut -d' ' -f1)
+            echo "${platform^^}_SHA=${sha}" >> $GITHUB_ENV
+            echo "✓ ${platform}: ${sha}"
+          done
         
-    - name: Update formula with new version and SHAs
-      working-directory: tap-repo
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/v}  # Remove 'refs/tags/v' prefix
-        
-        # Update formula using sed (the cyborg way)
-        sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/kagent.rb
-        sed -i "s/PLACEHOLDER_LINUX_ARM64_SHA/${LINUX_ARM64_SHA}/" Formula/kagent.rb
-        sed -i "s/PLACEHOLDER_LINUX_AMD64_SHA/${LINUX_AMD64_SHA}/" Formula/kagent.rb
-        
-        # Also update the existing darwin SHAs
-        sed -i "s/sha256 \"c03434d.*\"/sha256 \"${DARWIN_ARM64_SHA}\"/" Formula/kagent.rb
-        sed -i "s/sha256 \"c953cab.*\"/sha256 \"${DARWIN_AMD64_SHA}\"/" Formula/kagent.rb
-        
-    - name: Commit and push changes
-      working-directory: tap-repo
-      run: |
-        git config user.name "kagent-release-bot"
-        git config user.email "bot@kagent-dev.github.io"
-        git add Formula/kagent.rb
-        git commit -m "🤖 Auto-update kagent to ${GITHUB_REF#refs/tags/}"
-        git push
+      - name: Update formula with new version and SHAs
+        working-directory: tap-repo
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}  # Remove 'refs/tags/v' prefix
+          
+          # Update formula using sed (the cyborg way)
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/kagent.rb
+          sed -i "s/PLACEHOLDER_LINUX_ARM64_SHA/${LINUX_ARM64_SHA}/" Formula/kagent.rb
+          sed -i "s/PLACEHOLDER_LINUX_AMD64_SHA/${LINUX_AMD64_SHA}/" Formula/kagent.rb
+          
+          # Also update the existing darwin SHAs
+          sed -i "s/sha256 \"c03434d.*\"/sha256 \"${DARWIN_ARM64_SHA}\"/" Formula/kagent.rb
+          sed -i "s/sha256 \"c953cab.*\"/sha256 \"${DARWIN_AMD64_SHA}\"/" Formula/kagent.rb
+          
+      - name: Commit and push changes
+        working-directory: tap-repo
+        run: |
+          git config user.name "kagent-release-bot"
+          git config user.email "bot@kagent-dev.github.io"
+          git add Formula/kagent.rb
+          git commit -m "🤖 Auto-update kagent to ${GITHUB_REF#refs/tags/}"
+          git push
 ```
 
 ### 3.2 Local Tap Validation Workflow
@@ -217,27 +259,40 @@ jobs:
 
 ### 4.2 SHA Computation Strategy
 
+**Optimized Approach**: Instead of downloading binaries, we leverage the `.sha256` files that kagent already publishes with each release.
+
 ```bash
 #!/bin/bash
-# scripts/update-sha.sh - The SHA automation script
+# scripts/update-sha.sh - The efficient SHA extraction script
 
-get_release_sha() {
+get_release_sha_from_api() {
     local version=$1
     local platform=$2
     
-    # Download SHA file directly from GitHub releases
+    # Get SHA directly from the .sha256 file in GitHub releases
     curl -sL "https://github.com/kagent-dev/kagent/releases/download/v${version}/kagent-${platform}.sha256" \
         | cut -d' ' -f1
+}
+
+get_release_info_via_api() {
+    local version=$1
+    local repo_owner="kagent-dev"
+    local repo_name="kagent"
+    
+    # Use GitHub API to get release information (more efficient)
+    curl -s \
+        -H "Accept: application/vnd.github.v3+json" \
+        "https://api.github.com/repos/${repo_owner}/${repo_name}/releases/tags/v${version}"
 }
 
 update_formula_shas() {
     local version=$1
     
-    # Get all platform SHAs
-    darwin_amd64_sha=$(get_release_sha "$version" "darwin-amd64")
-    darwin_arm64_sha=$(get_release_sha "$version" "darwin-arm64") 
-    linux_amd64_sha=$(get_release_sha "$version" "linux-amd64")
-    linux_arm64_sha=$(get_release_sha "$version" "linux-arm64")
+    # Get all platform SHAs efficiently (no binary downloads)
+    darwin_amd64_sha=$(get_release_sha_from_api "$version" "darwin-amd64")
+    darwin_arm64_sha=$(get_release_sha_from_api "$version" "darwin-arm64") 
+    linux_amd64_sha=$(get_release_sha_from_api "$version" "linux-amd64")
+    linux_arm64_sha=$(get_release_sha_from_api "$version" "linux-arm64")
     
     # Update formula atomically
     sed -i.bak \
@@ -251,6 +306,13 @@ update_formula_shas() {
     rm Formula/kagent.rb.bak
 }
 ```
+
+**Key Efficiency Improvements**:
+- ✅ No binary downloads (saves bandwidth and time)
+- ✅ Uses existing `.sha256` files from kagent releases  
+- ✅ Leverages GitHub Releases API for metadata
+- ✅ Works with softprops/action-gh-release outputs
+- ✅ Integrates cleanly with existing kagent release workflow
 
 ---
 
