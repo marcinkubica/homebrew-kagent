@@ -1,0 +1,86 @@
+name: Update Formula
+
+on:
+  repository_dispatch:
+    types: [new-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version to update to (e.g., 0.4.1)'
+        required: true
+        type: string
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        else
+          echo "VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Fetch release assets and SHAs
+      id: fetch-assets
+      run: |
+        VERSION=${{ steps.version.outputs.VERSION }}
+        
+        # Fetch release information
+        RELEASE_INFO=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/tags/v${VERSION}")
+        
+        # Extract SHA256 values from the digest field of each asset
+        DARWIN_ARM64_SHA=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "kagent-darwin-arm64") | .digest | split(":")[1]')
+        DARWIN_AMD64_SHA=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "kagent-darwin-amd64") | .digest | split(":")[1]')
+        LINUX_ARM64_SHA=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "kagent-linux-arm64") | .digest | split(":")[1]')
+        LINUX_AMD64_SHA=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "kagent-linux-amd64") | .digest | split(":")[1]')
+        
+        echo "DARWIN_ARM64_SHA=$DARWIN_ARM64_SHA" >> $GITHUB_OUTPUT
+        echo "DARWIN_AMD64_SHA=$DARWIN_AMD64_SHA" >> $GITHUB_OUTPUT
+        echo "LINUX_ARM64_SHA=$LINUX_ARM64_SHA" >> $GITHUB_OUTPUT
+        echo "LINUX_AMD64_SHA=$LINUX_AMD64_SHA" >> $GITHUB_OUTPUT
+    
+    - name: Update formula
+      run: |
+        VERSION=${{ steps.version.outputs.VERSION }}
+        DARWIN_ARM64_SHA=${{ steps.fetch-assets.outputs.DARWIN_ARM64_SHA }}
+        DARWIN_AMD64_SHA=${{ steps.fetch-assets.outputs.DARWIN_AMD64_SHA }}
+        LINUX_ARM64_SHA=${{ steps.fetch-assets.outputs.LINUX_ARM64_SHA }}
+        LINUX_AMD64_SHA=${{ steps.fetch-assets.outputs.LINUX_AMD64_SHA }}
+        
+        # Update the formula file
+        sed -i "s/version \".*\"/version \"$VERSION\"/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # darwin-arm64/sha256 \"$DARWIN_ARM64_SHA\"/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # darwin-amd64/sha256 \"$DARWIN_AMD64_SHA\"/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # linux-arm64/sha256 \"$LINUX_ARM64_SHA\"/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\"/" Formula/kagent.rb
+    
+    - name: Update README
+      run: |
+        VERSION=${{ steps.version.outputs.VERSION }}
+        sed -i "s/version \*\*v.*\*\*/version **v$VERSION**/" README.md
+    
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Update kagent to v${{ steps.version.outputs.VERSION }}"
+        title: "Update kagent to v${{ steps.version.outputs.VERSION }}"
+        body: |
+          This PR updates the kagent formula to version v${{ steps.version.outputs.VERSION }}.
+          
+          Changes:
+          - Updated version to v${{ steps.version.outputs.VERSION }}
+          - Updated SHA256 checksums for all platforms
+          - Updated README with new version
+          
+          This PR was automatically created by the update-formula workflow.
+        branch: "update-v${{ steps.version.outputs.VERSION }}"
+        delete-branch: true 
