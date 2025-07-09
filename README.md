@@ -43,6 +43,6 @@ brew install kagent-dev/kagent
 
 `kagent` is a CLI agent for Kubernetes automation. For more information, visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
 
-## Contributing
+## What's broken
 
-This tap is automatically updated when new releases are published to the main kagent repository.
+Github Workflows are bananas
