@@ -53,7 +53,7 @@ brew install kagent-dev/kagent
 
 ## About kagent
 
-`kagent` is a CLI agent for Kubernetes automation. For more information, visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
+`kagent` brings Agentic AI to Cloud Native. Visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
 
 ## What's broken
 
