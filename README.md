@@ -14,6 +14,18 @@ brew tap marcinkubica/kagent
 brew install kagent
 ```
 
+Or
+```bash
+# Add tap and install
+brew install marcinkubica/kagent/kagent
+```
+
+Both of these commands will allow you later to issue
+
+```sh
+brew upgrade kagent
+```
+
 ## Verify Installation
 
 After installation, verify that `kagent` is working:
