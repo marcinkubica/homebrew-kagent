@@ -20,25 +20,13 @@ Or
 brew install marcinkubica/kagent/kagent
 ```
 
-Both of these commands will allow you later to issue
+Both of these commands will allow you later to simply upgrade with
 
 ```sh
 brew upgrade kagent
 ```
 
-## Verify Installation
-
-After installation, verify that `kagent` is working:
-
-```bash
-kagent version
-```
-
-## Current Version
-
-This tap currently provides `kagent` version **v0.4.0**.
-
-## Supported Platforms
+## TestedPlatforms
 
 - macOS (Intel and Apple Silicon)
 - Linux (AMD64 and ARM64)
@@ -48,13 +36,15 @@ This tap currently provides `kagent` version **v0.4.0**.
 This repository will eventually be moved to `https://github.com/kagent-dev` and users will be able to install with:
 
 ```bash
-brew install kagent-dev/kagent
+brew install kagent-dev/kagent/kagent
+
+#and
+brew upgrade kagent
 ```
 
 ## About kagent
 
 `kagent` brings Agentic AI to Cloud Native. Visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
 
-## What's broken
-
-Github Workflows are bananas
+## License
+Apache-2.0
