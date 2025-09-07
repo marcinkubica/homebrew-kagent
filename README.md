@@ -1,12 +1,12 @@
 # homebrew-kagent
 
-A Homebrew tap for installing `kagent` - the CLI agent for Kubernetes automation.
+A Homebrew tap for installing `kagent` CLI
 
 ## Installation
 
 To install `kagent` using this tap:
 
-```bash
+```sh
 # Add the tap
 brew tap marcinkubica/kagent
 
@@ -15,7 +15,7 @@ brew install kagent
 ```
 
 Or
-```bash
+```sh
 # Add tap and install
 brew install marcinkubica/kagent/kagent
 ```
@@ -35,10 +35,12 @@ brew upgrade kagent
 
 This repository will eventually be moved to `https://github.com/kagent-dev` and users will be able to install with:
 
-```bash
+```sh
 brew install kagent-dev/kagent/kagent
+```
 
-#and
+and
+```sh
 brew upgrade kagent
 ```
 
