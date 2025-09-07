@@ -66,11 +66,6 @@ This repository will eventually be moved to `https://github.com/kagent-dev` and 
 brew install kagent-dev/kagent/kagent
 ```
 
-and
-```sh
-brew upgrade kagent
-```
-
 ## License
 
 Apache-2.0
