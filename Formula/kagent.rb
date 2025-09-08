@@ -1,28 +1,28 @@
 class Kagent < Formula
   desc "kagent: CLI agent for Kubernetes automation"
   homepage "https://github.com/kagent-dev/kagent"
-  version "0.4.0"
+  version "0.6.9"
 
   # URL and checksum will be updated per-release
   if OS.mac?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-arm64"
-      sha256 "82bdd439ef348c3298f1a81f334fa8bbf6cc7687eeaef13da34726667b5305b7" # darwin-arm64
+      sha256 "17374d2048927155bd6a400ac2531c7bd38f0afee4151dc49704c2ce4f4ee9c8"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-amd64"
-      sha256 "80223d585ca55a81aa81e48b481ec5c25d226ec907dd3fbf9b4a86d59f087e12" # darwin-amd64
+      sha256 "60d1ec3d8068e94b3d4d9add4ab88d9983b4df4e4beecd3b10f71b62e11c48c0"
     end
   elsif OS.linux?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-arm64"
-      sha256 "c761a3a39c59fd2ef6f680a299b7eaf914f3d21572319dde55a5fd4ae781e9df" # linux-arm64
+      sha256 "6d0abc40977f481e50e31ba6dce6f31ec99a340d0936e9af45bbeba0785d821e"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-amd64"
-      sha256 "5040aa847b2a328e502f9456ef6d10a5c3ddeb5f5e8e196bcf9c7e53c7c2f14d" # linux-amd64
+      sha256 "88a9ddba97eb4814b0f80a339cd28d0f0f12717b18c6e09ef26ce2702c54bf24"
     end
   end
 
