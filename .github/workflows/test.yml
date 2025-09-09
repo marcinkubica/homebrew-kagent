@@ -5,19 +5,19 @@ on:
     branches: [ main ]
 
 jobs:
-  test-linux-arm:
-    runs-on: ubuntu-22.04-arm
-    steps:
-    - uses: actions/checkout@v5
+  # test-linux-arm:
+  #   runs-on: ubuntu-22.04-arm
+  #   steps:
+  #   - uses: actions/checkout@v5
 
-    - name: Install brew
-      run: |
-        uname -a
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        brew audit --strict --online kagent
-        brew install --build-from-source kagent
-        kagent version || true
-        brew uninstall kagent
+  #   - name: Install brew
+  #     run: |
+  #       uname -a
+  #       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  #       brew audit --strict --online kagent
+  #       brew install --build-from-source kagent
+  #       kagent version || true
+  #       brew uninstall kagent
 
   test:
     name: test ${{ matrix.label }}
@@ -26,6 +26,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: ubuntu-22.04-arm
+            label: linux arm
           - os: ubuntu-latest
             label: linux amd64
           - os: macos-latest
