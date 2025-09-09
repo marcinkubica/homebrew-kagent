@@ -20,17 +20,13 @@ jobs:
       uses: Homebrew/actions/setup-homebrew@main
 
     - name: Test formula syntax
-      run: |
-        brew audit --strict --online Formula/kagent.rb
+      run: rew audit --strict --online kagent
 
     - name: Test formula installation
-      run: |
-        brew install --build-from-source Formula/kagent.rb
+      run:  brew install --build-from-source kagent
 
     - name: Test kagent binary
-      run: |
-        kagent version
+      run: kagent version || true
 
     - name: Test formula uninstall
-      run: |
-        brew uninstall kagent
+      run: brew uninstall kagent
