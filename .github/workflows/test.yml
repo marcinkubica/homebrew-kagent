@@ -23,7 +23,7 @@ jobs:
       uses: Homebrew/actions/setup-homebrew@main
 
     - name: Test formula syntax
-      run: rew audit --strict --online kagent
+      run: brew audit --strict --online kagent
 
     - name: Test formula installation
       run:  brew install --build-from-source kagent
