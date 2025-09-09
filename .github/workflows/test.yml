@@ -13,8 +13,11 @@ jobs:
     - name: Install brew
       run: |
         uname -a
+        sudo apt-get update && sudo apt-get install build-essential
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        brew install gcc
+
         brew audit --strict --online kagent
         brew install --build-from-source kagent
         kagent version || true
