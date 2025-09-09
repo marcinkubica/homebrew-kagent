@@ -6,16 +6,25 @@ on:
 
 jobs:
   test:
+    name: test ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-24.04-arm
+            label: linux arm
+          - os: ubuntu-latest
+            label: linux amd64
+          - os: macos-latest
+            label: macos arm64
+          - os: macos-13
+            label: macos intel
 
     steps:
     - uses: actions/checkout@v5
 
-    - name: show platform
+    - name: Show platform
       run: uname -a
 
     - name: Set up Homebrew
