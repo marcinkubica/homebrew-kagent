@@ -5,6 +5,17 @@ on:
     branches: [ main ]
 
 jobs:
+  test-linux-arm:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Install brew
+      run: |
+        uname -a
+        sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+
   test:
     name: test ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
@@ -12,8 +23,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-24.04-arm
-            label: linux arm
           - os: ubuntu-latest
             label: linux amd64
           - os: macos-latest

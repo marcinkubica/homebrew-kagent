@@ -1,5 +1,5 @@
 class Kagent < Formula
-  desc "kagent: CLI agent for Kubernetes automation"
+  desc "kagent: CLI agent for Cloud Native Agentic AI"
   homepage "https://github.com/kagent-dev/kagent"
   version "0.6.9"
 
