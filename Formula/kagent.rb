@@ -1,7 +1,8 @@
 class Kagent < Formula
-  desc "kagent: CLI agent for Kubernetes automation"
+  desc "kagent: CLI agent for Cloud Native Agentic AI"
   homepage "https://github.com/kagent-dev/kagent"
   version "0.6.9"
+  license "Apache-2.0"
 
   # URL and checksum will be updated per-release
   if OS.mac?
