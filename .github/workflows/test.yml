@@ -1,6 +1,7 @@
 name: Test Formula
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [ main ]
 
