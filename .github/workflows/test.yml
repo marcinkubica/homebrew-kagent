@@ -13,11 +13,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04-arm
-            label: linux arm64
+            label: linux arm
           - os: ubuntu-latest
-            label: linux amd64
+            label: linux intel
           - os: macos-latest
-            label: macos arm64
+            label: macos arm
           - os: macos-13
             label: macos intel
 
