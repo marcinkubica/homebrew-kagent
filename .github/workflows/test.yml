@@ -5,24 +5,6 @@ on:
     branches: [ main ]
 
 jobs:
-  # test-linux-arm:
-  #   runs-on: ubuntu-22.04-arm
-  #   steps:
-  #   - uses: actions/checkout@v5
-
-  #   - name: Install brew
-  #     run: |
-  #       uname -a
-  #       sudo apt-get update && sudo apt-get install build-essential
-  #       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  #       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  #       brew install gcc
-
-  #       brew audit --strict --online kagent
-  #       brew install --build-from-source kagent
-  #       kagent version || true
-  #       brew uninstall kagent
-
   test:
     name: test ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
@@ -30,9 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #doesn't work https://github.com/Homebrew/actions/issues/742
           - os: ubuntu-22.04-arm
-            label: linux arm
+            label: linux arm64
           - os: ubuntu-latest
             label: linux amd64
           - os: macos-latest
@@ -46,13 +27,13 @@ jobs:
     - name: Show platform
       run: uname -a
 
+    # https://github.com/Homebrew/actions/issues/742
     - name: Preinstall homebrew
       run: |
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
     - name: Set up Homebrew
-      id: set-up-homebrew
       uses: Homebrew/actions/setup-homebrew@main
 
     - name: Test formula syntax
