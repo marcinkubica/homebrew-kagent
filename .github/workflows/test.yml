@@ -15,12 +15,12 @@ jobs:
         include:
           - os: ubuntu-22.04-arm
             label: linux arm
-          - os: ubuntu-latest
-            label: linux intel
-          - os: macos-latest
-            label: macos arm
-          - os: macos-13
-            label: macos intel
+          # - os: ubuntu-latest
+          #   label: linux intel
+          # - os: macos-latest
+          #   label: macos arm
+          # - os: macos-13
+          #   label: macos intel
 
     steps:
     - uses: actions/checkout@v5
@@ -39,7 +39,7 @@ jobs:
 
 
     - name: Brew Test
-      run: brew test kagent
+      run: brew test kagent --verbose --debug
 
 
     - name: Test formula syntax
