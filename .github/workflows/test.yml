@@ -38,7 +38,7 @@ jobs:
 
 
     - name: Brew Test
-      run: brew kagent
+      run: brew test kagent
 
 
     - name: Test formula syntax
