@@ -55,7 +55,7 @@ jobs:
         sed -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\"/" Formula/kagent.rb
 
         echo ":: Updating README"
-        sed -i "s/\*\*v \.\*.\*\*/**v$VERSION**/" README.md
+        sed -i "s/\*\*v [0-9.]\+\*\*/**v $VERSION**/" README.md
 
     - name: Commit changes directly to main
       env:
