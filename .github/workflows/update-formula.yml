@@ -2,14 +2,9 @@ name: Update Formula
 run-name: Update Formula to ${{ github.event.inputs.version }}
 
 on:
-  repository_dispatch:
-    types: [new-release]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'New version to update to (e.g., 0.4.1)'
-        required: true
-        type: string
+  push:
+    branches:
+      - main
 
 jobs:
   update-formula:
@@ -22,20 +17,15 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Set version
+    - name: Get current version ${{ env.VERSION}}
       id: version
       run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-        else
-          echo "VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
-        fi
+        echo "VERSION=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/latest" | jq -r .tag_name)" >> $GITHUB_OUTPUT
+
     - name: Fetch release assets and SHAs
       id: fetch-assets
       run: |
-        VERSION=${{ steps.version.outputs.VERSION }}
-
-        echo ":: Fetching release information"
+        echo ":: Fetching release information for version $VERSION"
         RELEASE_INFO=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/tags/v${VERSION}")
 
         echo ":: Extracting SHA256 values from the digest field of each asset"
