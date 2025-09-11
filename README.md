@@ -60,11 +60,10 @@ sudo rm $(which kagent)
 
 ## Future Plans
 
-This repository will eventually be moved to `https://github.com/kagent-dev` and users will be able to install with:
+This repository was supposed to be moved to `https://github.com/kagent-dev` however other stream of work is
+currenlty in play to place kagent in hombrew-core for canonical `brew install kagent` command.
 
-```sh
-brew install kagent-dev/kagent/kagent
-```
+Till that day this repository will strive to automatically update the tap.
 
 ## License
 
