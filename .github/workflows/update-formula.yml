@@ -1,4 +1,5 @@
 name: Update Formula
+run-name: Update Formula to ${{ github.event.inputs.version }}
 
 on:
   repository_dispatch:
