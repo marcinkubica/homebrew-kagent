@@ -57,21 +57,11 @@ jobs:
         echo ":: Updating README"
         sed -i "s/\*\*v \.\*.\*\*/**v$VERSION**/" README.md
 
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v7
-      with:
-        signoff: true
-        sign-commits: true
-        commit-message: "Update kagent to v${{ steps.version.outputs.VERSION }}"
-        title: "Update kagent to v${{ steps.version.outputs.VERSION }}"
-        body: |
-          This PR updates the kagent formula to version v${{ steps.version.outputs.VERSION }}.
-
-          Changes:
-          - Updated version to v${{ steps.version.outputs.VERSION }}
-          - Updated SHA256 checksums for all platforms
-          - Updated README with new version
-
-          This PR was automatically created by the update-formula workflow.
-        branch: "update-v${{ steps.version.outputs.VERSION }}"
-        delete-branch: true
+    - name: Commit changes directly to main
+      run: |
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+        git add Formula/kagent.rb README.md
+        git diff
+#        git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
+        git push
