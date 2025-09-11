@@ -66,6 +66,7 @@ jobs:
         git add Formula/kagent.rb README.md
         git status
         git diff > diff.txt
+        ls -la
         cat diff.txt
 #        cat Formula/kagent.rb
 #        cat README.md
