@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Get current version ${{ env.VERSION}}
+    - name: Get current version
       id: version
       run: |
         echo "VERSION=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/latest" | jq -r .tag_name | sed 's/^v//')" >> $GITHUB_OUTPUT
