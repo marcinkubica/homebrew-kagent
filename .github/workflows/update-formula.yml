@@ -63,5 +63,6 @@ jobs:
         git config user.name "github-actions[bot]"
         git add Formula/kagent.rb README.md
         git status
+        git diff
         #git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
         #git push
