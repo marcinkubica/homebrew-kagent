@@ -1,5 +1,4 @@
 name: Update Formula
-run-name: Update Formula to ${{ github.event.inputs.version }}
 
 on:
   push:
@@ -11,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
         contents: write
-        id-token: write
         pull-requests: write
 
     steps:
@@ -61,7 +59,6 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         signoff: true
         sign-commits: true
         commit-message: "Update kagent to v${{ steps.version.outputs.VERSION }}"
