@@ -62,7 +62,7 @@ jobs:
         sed --debug -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\" # linux-amd64/" Formula/kagent.rb
 
         echo ":: Updating README"
-        sed -i "s/\*\*v\.\*.\*\*/**v$VERSION**/" README.md
+        sed --debug -i "s/\*\*v\.\*.\*\*/**v$VERSION**/" README.md
 
     - name: Commit changes directly to main
       env:
@@ -70,6 +70,7 @@ jobs:
       run: |
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
+        git pull --rebase
         git add Formula/kagent.rb README.md
         git status
         git diff --staged
