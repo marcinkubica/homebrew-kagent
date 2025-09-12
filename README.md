@@ -1,6 +1,6 @@
-# homebrew-kagent
+# homebrew-kagent **v0.0.0**
 
-A Homebrew tap for installing `kagent` CLI - **v X.Y.Z**
+A Homebrew tap for installing `kagent` CLI
 
 `kagent` brings Agentic AI to Cloud Native. Visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
 
