@@ -49,13 +49,13 @@ jobs:
 
         echo ":: Updating the formula file"
         sed -i "s/version \".*\"/version \"$VERSION\"/" Formula/kagent.rb
-        sed -i "s/sha256 \".*\" # darwin-arm64/sha256 \"$DARWIN_ARM64_SHA\"/" Formula/kagent.rb
-        sed -i "s/sha256 \".*\" # darwin-amd64/sha256 \"$DARWIN_AMD64_SHA\"/" Formula/kagent.rb
-        sed -i "s/sha256 \".*\" # linux-arm64/sha256 \"$LINUX_ARM64_SHA\"/" Formula/kagent.rb
-        sed -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\"/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # darwin-arm64/sha256 \"$DARWIN_ARM64_SHA\" # darwin-arm64/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # darwin-amd64/sha256 \"$DARWIN_AMD64_SHA\" # darwin-amd64/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # linux-arm64/sha256 \"$LINUX_ARM64_SHA\" # linux-arm64/" Formula/kagent.rb
+        sed -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\" # linux-amd64/" Formula/kagent.rb
 
         echo ":: Updating README"
-        sed -i "s/\*\*v[0-9.]\+\*\*/**v$VERSION**/" README.md
+        sed -i "s/\*\*v\.\*.\*\*/**v$VERSION**/" README.md
 
     - name: Commit changes directly to main
       env:
@@ -66,5 +66,5 @@ jobs:
         git add Formula/kagent.rb README.md
         git status
         git diff --staged
-        git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
-        git push
+        #git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
+        #git push
