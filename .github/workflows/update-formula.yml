@@ -26,6 +26,7 @@ jobs:
         VERSION="${{ steps.version.outputs.VERSION }}"
         echo ":: Fetching release information for version $VERSION"
         RELEASE_INFO=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/tags/v${VERSION}")
+        echo $RELEASE_INFO
 
         echo ":: Extracting SHA256 values from the digest field of each asset"
         DARWIN_ARM64_SHA=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "kagent-darwin-arm64") | .digest | split(":")[1]')
