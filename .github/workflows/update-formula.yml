@@ -55,11 +55,11 @@ jobs:
         echo "LINUX_AMD64_SHA=${{ steps.fetch-assets.outputs.LINUX_AMD64_SHA }}"
 
         echo ":: Updating the formula file"
-        sed --debug -i "s/version \".*\"/version \"$VERSION\"/" Formula/kagent.rb
-        sed --debug -i "s/sha256 \".*\" # darwin-arm64/sha256 \"$DARWIN_ARM64_SHA\" # darwin-arm64/" Formula/kagent.rb
-        sed --debug -i "s/sha256 \".*\" # darwin-amd64/sha256 \"$DARWIN_AMD64_SHA\" # darwin-amd64/" Formula/kagent.rb
-        sed --debug -i "s/sha256 \".*\" # linux-arm64/sha256 \"$LINUX_ARM64_SHA\" # linux-arm64/" Formula/kagent.rb
-        sed --debug -i "s/sha256 \".*\" # linux-amd64/sha256 \"$LINUX_AMD64_SHA\" # linux-amd64/" Formula/kagent.rb
+        sed -i "s/version \".*\"/version \"$VERSION\"/" Formula/kagent.rb
+        sed -i '11s/sha256 ".*"/sha256 "'$DARWIN_ARM64_SHA'"/' Formula/kagent.rb
+        sed -i '16s/sha256 ".*"/sha256 "'$DARWIN_AMD64_SHA'"/' Formula/kagent.rb
+        sed -i '21s/sha256 ".*"/sha256 "'$LINUX_ARM64_SHA'"/' Formula/kagent.rb
+        sed -i '26s/sha256 ".*"/sha256 "'$LINUX_AMD64_SHA'"/' Formula/kagent.rb
 
         echo ":: Updating README"
         sed --debug -i "s/\*\*v\.\*.\*\*/**v$VERSION**/" README.md
