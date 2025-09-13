@@ -40,7 +40,7 @@ jobs:
         echo "LINUX_ARM64_SHA=$LINUX_ARM64_SHA" >> $GITHUB_OUTPUT
         echo "LINUX_AMD64_SHA=$LINUX_AMD64_SHA" >> $GITHUB_OUTPUT
 
-    - name: Update formula
+    - name: Update formula ${{ steps.version.outputs.VERSION }}
       run: |
         VERSION=${{ steps.version.outputs.VERSION }}
         DARWIN_ARM64_SHA=${{ steps.fetch-assets.outputs.DARWIN_ARM64_SHA }}
@@ -73,5 +73,5 @@ jobs:
         git add Formula/kagent.rb README.md
         git status
         git diff --staged
-        #git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
-        #git push
+        git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
+        git push
