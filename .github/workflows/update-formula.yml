@@ -27,6 +27,7 @@ jobs:
     - name: Fetch release assets and SHAs
       id: fetch-assets
       run: |
+        sleep 10;
         VERSION="${{ steps.version.outputs.VERSION }}"
         echo ":: Fetching release information for version $VERSION"
         RELEASE_INFO=$(curl -s "https://api.github.com/repos/kagent-dev/kagent/releases/tags/v${VERSION}")
