@@ -1,0 +1,49 @@
+class Kagent < Formula
+  desc "kagent: CLI agent for Cloud Native Agentic AI"
+  homepage "https://github.com/kagent-dev/kagent"
+  version "0.6.11"
+  license "Apache-2.0"
+
+  # URL and checksum will be updated per-release
+  if OS.mac?
+    on_arm do
+      url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-arm64"
+      sha256 "fd70e8ac424166b200cc4d4abe38c120991c4706b63225fc939096e11dd00d77"
+    end
+
+    on_intel do
+      url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-amd64"
+      sha256 "60d1ec3d8068e94b3d4d9add4ab88d9983b4df4e4beecd3b10f71b62e11c48c0"
+    end
+  elsif OS.linux?
+    on_arm do
+      url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-arm64"
+      sha256 "6d0abc40977f481e50e31ba6dce6f31ec99a340d0936e9af45bbeba0785d821e"
+    end
+
+    on_intel do
+      url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-amd64"
+      sha256 "88a9ddba97eb4814b0f80a339cd28d0f0f12717b18c6e09ef26ce2702c54bf24"
+    end
+  end
+
+  def install
+    # The downloaded file will have the platform-specific name, but we want to install it as just "kagent"
+    downloaded_file = if OS.mac? && Hardware::CPU.arm?
+      "kagent-darwin-arm64"
+    elsif OS.mac? && Hardware::CPU.intel?
+      "kagent-darwin-amd64"
+    elsif OS.linux? && Hardware::CPU.arm?
+      "kagent-linux-arm64"
+    elsif OS.linux? && Hardware::CPU.intel?
+      "kagent-linux-amd64"
+    end
+
+    bin.install downloaded_file => "kagent"
+  end
+
+  test do
+    output = shell_output("#{bin}/kagent version")
+    assert_match "\"kagent_version\":\"#{version}\"", output
+  end
+end 

@@ -7,7 +7,6 @@ A Homebrew tap for installing `kagent` CLI
 ## Installation
 
 To install with this tap:
-
 ```sh
 # Add the tap
 brew tap marcinkubica/kagent
