@@ -8,22 +8,22 @@ class Kagent < Formula
   if OS.mac?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-arm64"
-      sha256 "17374d2048927155bd6a400ac2531c7bd38f0afee4151dc49704c2ce4f4ee9c8"
+      sha256 "fd70e8ac424166b200cc4d4abe38c120991c4706b63225fc939096e11dd00d77"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-amd64"
-      sha256 "60d1ec3d8068e94b3d4d9add4ab88d9983b4df4e4beecd3b10f71b62e11c48c0"
+      sha256 "d522d2d98969d79935ca45873c55072fd702fcdd1c7fa9249debeae07ca0f25f"
     end
   elsif OS.linux?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-arm64"
-      sha256 "6d0abc40977f481e50e31ba6dce6f31ec99a340d0936e9af45bbeba0785d821e"
+      sha256 "f69b7a408ec793384514254e6dd425465b85e54d32bdae83716557ce14164581"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-amd64"
-      sha256 "88a9ddba97eb4814b0f80a339cd28d0f0f12717b18c6e09ef26ce2702c54bf24"
+      sha256 "3526ec461a412084c0a9762fca74ef8e89158ccd13463a5bd480c0409d7edced"
     end
   end
 
