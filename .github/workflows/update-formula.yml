@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # every 10 minutes
+    - cron: '*/10 * * * *'
+
 
 jobs:
   update-formula:
