@@ -5,8 +5,8 @@ on:
     branches:
       - main
   schedule:
-    # every 10 minutes
-    - cron: '*/10 * * * *'
+    # every hour
+    - cron: '0 * * * *'
 
 
 jobs:
