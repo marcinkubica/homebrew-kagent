@@ -90,7 +90,7 @@ jobs:
         git push origin --tags
 
         echo "::kicking release notifier"
-        gh workflow run release-notifier.yml -i version=${{ steps.version.outputs.VERSION }}
+        gh workflow run release-notifier.yml -F version=${{ steps.version.outputs.VERSION }}
 
     - name: Kick testing job
       if: env.got_update == 'true'

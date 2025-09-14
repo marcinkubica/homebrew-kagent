@@ -1,4 +1,4 @@
-name: Test Formula
+name: 🧪 Test Formula
 
 on:
   workflow_dispatch:
