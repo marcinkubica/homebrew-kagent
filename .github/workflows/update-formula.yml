@@ -14,6 +14,7 @@ jobs:
     permissions:
         contents: write
         pull-requests: write
+        actions: write
 
     steps:
     - uses: actions/checkout@v5
@@ -80,7 +81,7 @@ jobs:
           echo "::notice title=👌 Updated::Formula updated to ${{ steps.version.outputs.VERSION }}"
         else
           echo "No changes to commit"
-          echo "::notice title=♻️ Up to date::No changes."]
+          echo "::notice title=♻️ Up to date::No changes."
           #echo "no_update=true" >> $GITHUB_ENV
         fi
 
