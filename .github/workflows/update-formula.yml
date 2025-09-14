@@ -1,4 +1,4 @@
-name: 👀 Check for new kagent version
+name: Check for new kagent version 👀 
 
 on:
   push:

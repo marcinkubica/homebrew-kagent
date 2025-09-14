@@ -1,5 +1,5 @@
-name: 🧪 Test Formula
-run-name: 🧪 Test Formula ${{ inputs.version }}
+name: Test Formula 🧪
+run-name: Test Formula ${{ inputs.version }} 🧪
 
 on:
   workflow_dispatch:

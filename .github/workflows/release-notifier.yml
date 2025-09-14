@@ -1,5 +1,5 @@
-name: Release notifier
-run-name: 🚀 Release notify ${{ inputs.version }}
+name: Release notifier 🚀 
+run-name: Release notify ${{ inputs.version }} 🚀 
 
 on:
   workflow_dispatch:
