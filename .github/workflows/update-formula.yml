@@ -86,6 +86,10 @@ jobs:
         git config user.name "github-actions[bot]"
         git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
         git push
+
+    - name: Tag release and notify
+      if: env.got_update == 'true'
+      run: |
         git tag -a v${{ steps.version.outputs.VERSION }} -m "Version Update: ${{ steps.version.outputs.VERSION }}"
         git push origin --tags
 

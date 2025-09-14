@@ -1,7 +1,13 @@
 name: 🧪 Test Formula
+run-name: 🧪 Test Formula ${{ inputs.version }}
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        required: false
+        type: string
+
   pull_request:
     branches: [ main ]
 
