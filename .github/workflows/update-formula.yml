@@ -70,7 +70,7 @@ jobs:
         echo ":: Looking for changes"
         git add Formula/kagent.rb README.md
         if ! git diff --staged --quiet; then
-          echo "::notice title=👌 Updated::Formula updated to ${{ steps.version.outputs.VERSION }}"
+          echo "::notice title=👌 Noice::Formula updated to ${{ steps.version.outputs.VERSION }}"
         else
           echo "::notice title=♻️ Up to date::No changes. No problem."
           echo "no_update=true" >> $GITHUB_ENV
