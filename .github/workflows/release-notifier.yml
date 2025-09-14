@@ -1,0 +1,17 @@
+name: Release notifier
+run-name: 🚀 Release notify ${{ inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify
+      run: |
+        echo "::notice title=🚀 New Rrelease::Version ${{ inputs.version }}"

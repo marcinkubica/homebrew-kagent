@@ -1,4 +1,4 @@
-name: Check for new kagent version
+name: 👀 Check for new kagent version
 
 on:
   push:
@@ -71,24 +71,31 @@ jobs:
         git add Formula/kagent.rb README.md
         if ! git diff --staged --quiet; then
           echo "::notice title=👌 Noice::Formula updated to ${{ steps.version.outputs.VERSION }}"
+          echo "got_update=true" >> $GITHUB_ENV
         else
-          echo "::notice title=♻️ Up to date::No changes. No problem."
-          echo "no_update=true" >> $GITHUB_ENV
+          echo "::notice title=♻️ Up to date::OK"
         fi
 
     - name: Commit changes directly to main
-      if: ${{ env.no_update != 'true' }}
+      if: env.got_update == 'true'
       env:
         PAGER: cat
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
         git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
         git push
+        git tag -a v${{ steps.version.outputs.VERSION }} -m "Version Update: ${{ steps.version.outputs.VERSION }}"
+        git push origin --tags
+
+        echo "::kicking release notifier"
+        gh workflow run release-notifier.yml -i version=${{ steps.version.outputs.VERSION }}
 
     - name: Kick testing job
-      if: ${{ env.no_update != 'true' }}
+      if: env.got_update == 'true'
       run: |
         gh workflow run test.yml
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
