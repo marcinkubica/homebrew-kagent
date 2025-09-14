@@ -8,7 +8,6 @@ on:
     # every hour
     - cron: '0 * * * *'
 
-
 jobs:
   update-formula:
     runs-on: ubuntu-latest
@@ -75,7 +74,16 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
         git add Formula/kagent.rb README.md
-        git status
-        git diff --staged
-        git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
-        git push
+        if ! git diff --staged --quiet; then
+          git commit -m "Update kagent to ${{ steps.version.outputs.VERSION }}"
+          git push
+          echo "::notice title=👌 Updated::Formula updated to ${{ steps.version.outputs.VERSION }}"
+        else
+          echo "No changes to commit"
+          echo "::notice title=♻️ Up to date::No changes."]
+          #echo "no_update=true" >> $GITHUB_ENV
+        fi
+
+    - name: Kick testing job
+      if: ${{ env.no_update != true }}
+      run: gh workflow run test.yml
