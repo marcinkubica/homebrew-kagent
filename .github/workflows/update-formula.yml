@@ -85,7 +85,7 @@ jobs:
         fi
 
     - name: Kick testing job
-      if: ${{ env.no_update != "true" }}
+      if: ${{ env.no_update != true }}
       run: |
         echo "no_update=${{ env.no_update }}"
         gh workflow run test.yml
