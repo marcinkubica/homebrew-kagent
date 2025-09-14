@@ -1,4 +1,4 @@
-name: Update Formula
+name: Check for new kagent version
 
 on:
   push:
