@@ -80,9 +80,8 @@ jobs:
           git push
           echo "::notice title=👌 Updated::Formula updated to ${{ steps.version.outputs.VERSION }}"
         else
-          echo "No changes to commit"
-          echo "::notice title=♻️ Up to date::No changes."
-          #echo "no_update=true" >> $GITHUB_ENV
+          echo "::notice title=♻️ Up to date::No changes. No problem."
+          echo "no_update=true" >> $GITHUB_ENV
         fi
 
     - name: Kick testing job
