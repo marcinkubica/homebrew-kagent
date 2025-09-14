@@ -87,3 +87,5 @@ jobs:
     - name: Kick testing job
       if: ${{ env.no_update != true }}
       run: gh workflow run test.yml
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
