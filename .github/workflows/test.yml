@@ -32,7 +32,7 @@ jobs:
     - uses: actions/checkout@v5
 
     - name: Show platform
-      run: uname -a; brew --version
+      run: uname -a
 
     # https://github.com/Homebrew/actions/issues/742
     # - name: Preinstall homebrew
