@@ -1,4 +1,4 @@
-# homebrew-kagent **v0.6.18**
+# homebrew-kagent **v0.6.19**
 
 A Homebrew tap for installing `kagent` CLI
 
