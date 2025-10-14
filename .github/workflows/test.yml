@@ -49,12 +49,8 @@ jobs:
     - name: Test formula installation
       run:  brew install --build-from-source kagent
 
-    #   fails due to https://github.com/kagent-dev/kagent/issues/868
-    # - name: Brew Test
-    #   run: brew test kagent --verbose --debug
-
-    - name: Test kagent binary
-      run: kagent version || true
+    - name: Brew Test
+      run: brew test kagent --verbose --debug
 
     - name: Test formula uninstall
       run: brew uninstall kagent
