@@ -1,29 +1,29 @@
 class Kagent < Formula
   desc "kagent: CLI agent for Cloud Native Agentic AI"
   homepage "https://github.com/kagent-dev/kagent"
-  version "0.6.19"
+  version "0.6.20"
   license "Apache-2.0"
 
   # URL and checksum will be updated per-release
   if OS.mac?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-arm64"
-      sha256 "5ac13c5f6164f04a98470daa52df8b0ee4ed5ddcc083ab9efbf30b4566edc694"
+      sha256 "dfc390c20a0adf542a598c06c9ce348d33ec115694b9a86467ca8adbc49de9a5"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-darwin-amd64"
-      sha256 "4505e72f45db3cb597d9241d69c434cb3d28727362a225f8c1cc1e7185418781"
+      sha256 "56f366a57e47afc730cd2b63def35e1d759079bfe22b76c44a1867fd6443c19b"
     end
   elsif OS.linux?
     on_arm do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-arm64"
-      sha256 "41b54d17e53b973911d39ffecb3641e73ca52dadc1c80def21213d5e414e5d28"
+      sha256 "4ffc40b53b10d992f0ffaffabe08ac98a87fd28cacce2e882775bd264bc1d41c"
     end
 
     on_intel do
       url "https://github.com/kagent-dev/kagent/releases/download/v#{version}/kagent-linux-amd64"
-      sha256 "ef91a03d43634f3cfe63c114889574460ff7744300b17d2acc0bf3523eb2c926"
+      sha256 "e42405d6d557b2664a881f86471d3bc968d00e31b0f858995dfb9817de466de4"
     end
   end
 
