@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
+        description: "kagent version to test"
         required: false
         type: string
 
@@ -23,9 +24,9 @@ jobs:
             label: linux arm
           - os: ubuntu-latest
             label: linux intel
-          - os: macos-latest
+          - os: macos-15
             label: macos arm
-          - os: macos-13
+          - os: macos-15-intel
             label: macos intel
 
     steps:
@@ -47,7 +48,9 @@ jobs:
       run: brew audit --strict --online kagent
 
     - name: Test formula installation
-      run:  brew install --build-from-source kagent
+      run: |
+        brew install --build-from-source kagent
+        brew info kagent
 
     - name: Brew Test
       run: brew test kagent --verbose --debug
