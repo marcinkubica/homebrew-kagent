@@ -1,6 +1,7 @@
 # homebrew-kagent (retired)
 
-> [!NOTE] This tap is no longer maintained. Please use the official
+> [!NOTE] 
+> This tap is no longer maintained. Please use the official
 > [homebrew-core](https://github.com/Homebrew/homebrew-core) formula instead.
 
 ## About
