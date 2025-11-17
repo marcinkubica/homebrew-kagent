@@ -1,37 +1,21 @@
-# homebrew-kagent **v0.7.4**
+# homebrew-kagent (retired)
 
-A Homebrew tap for installing `kagent` CLI
-
-`kagent` brings Agentic AI to Cloud Native. Visit the main repository at [https://github.com/kagent-dev/kagent](https://github.com/kagent-dev/kagent).
+> [!NOTE] This tap is no longer maintained. Please use the official
+> [homebrew-core](https://github.com/Homebrew/homebrew-core) formula instead.
 
 ## About
 
 
-This repository was supposed to be moved to `https://github.com/kagent-dev` however other stream of work is
-currenlty in play to place kagent in hombrew-core for canonical `brew install kagent` command.
+This tap previously provided a binary formula while the project was transitioning
+into Homebrew/core. 
 
-For now this repository looks to update the formula every hour.
+## Migration
 
-## Installation
+If you installed from this tap, run the following to migrate:
 
-To install with this tap:
 ```sh
-# Add the tap
-brew tap marcinkubica/kagent
-
-# Install kagent
+brew untap marcinkubica/kagent
 brew install kagent
-```
-
-Or add and install in one go:
-```sh
-brew install marcinkubica/kagent/kagent
-```
-
-Both of these commands will allow you later to simply upgrade with
-
-```sh
-brew upgrade kagent
 ```
 
 ## Migration from older _bash_ installer
